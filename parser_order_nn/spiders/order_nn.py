@@ -2,14 +2,14 @@ import scrapy
 from scrapy.http import HtmlResponse
 
 from parser_order_nn.items import ParserOrderNnItem
-from temp_Tests.conf import sawe_file_html, seve_file_txt
+from parser_order_nn.settings import FILE_NAME
 
 
 class OrderNnSpider(scrapy.Spider):
     name = "order_nn"
     allowed_domains = ["order_nn.ru"]
     start_urls = ["https://order-nn.ru/kmo/catalog/"]
-    custom_settings = {'FEED_URI': "./order.json",
+    custom_settings = {'FEED_URI': f"./{FILE_NAME}.json",
                        'FEED_FORMAT': 'json'}
 
     def parse(self, response):
@@ -40,7 +40,6 @@ class OrderNnSpider(scrapy.Spider):
 
 
         if int(next_page) > self.old_page(response):
-            seve_file_txt('next_url', f"{response.url.split('?')[0]}?PAGEN_1={next_page}")
             yield response.follow(f"{response.url.split('?')[0]}?PAGEN_1={next_page}",
                                   callback=self.parse_get_products,
                                   dont_filter=True,
@@ -86,11 +85,12 @@ class OrderNnSpider(scrapy.Spider):
         return f"https://order-nn.ru{url}"
 
     @staticmethod
-    def pat(url):
-        return f"//a[@href='{url}']/text()"
-
-    @staticmethod
     def old_page(response):
+        """
+        Вычисление текущей страницы
+        :param response:
+        :return: int
+        """
         number = response.url.split('=')[-1]
         if number.isdigit():
             return int(number)

@@ -9,6 +9,8 @@ from itemadapter import ItemAdapter
 import csv
 import pandas as pd
 
+from parser_order_nn.settings import FILE_NAME
+
 
 class ParserOrderNnPipeline:
     def process_item(self, item, spider):
@@ -56,7 +58,7 @@ class CSVPipeline(object):
     Запись item в CSV файл
     """
     def __init__(self):
-        self.file = 'database.csv'
+        self.file = f'{FILE_NAME}.csv'
 
         with open(self.file, 'r', newline='') as csv_file:
             self.tmp_data = csv.DictReader(csv_file).fieldnames

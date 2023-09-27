@@ -13,6 +13,7 @@ env = Env()
 env.read_env()
 
 BOT_NAME = "parser_order_nn"
+FILE_NAME = 'order_data'
 
 SPIDER_MODULES = ["parser_order_nn.spiders"]
 NEWSPIDER_MODULE = "parser_order_nn.spiders"
